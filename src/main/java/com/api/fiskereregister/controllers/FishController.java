@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:5173")
 public class FishController {
 
     private final FishService fishService;
@@ -17,11 +18,12 @@ public class FishController {
     @Autowired
     public FishController(FishService fishService) { this.fishService = fishService;  }
 
+
     //Få liste
     @GetMapping("fish")
     public ResponseEntity<FishResponse> getFishs(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     ) {
         return new ResponseEntity<>(fishService.getAllFish(pageNo, pageSize), HttpStatus.OK);
     }

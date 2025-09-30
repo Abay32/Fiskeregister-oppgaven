@@ -24,23 +24,9 @@ public class FishServiceImpl implements FishService {
 
     @Override
     public FishDto createFish(FishDto fishDto) {
-        Fish fish = new Fish();
-        fish.setNavn(fishDto.getNavn());
-        fish.setArt(fishDto.getArt());
-        fish.setLengde(fishDto.getLengde());
-        fish.setVekt(fishDto.getVekt());
-
-        Fish newFish = fishRepository.save(fish);
-
-        FishDto fishResponse = new FishDto();
-        fishResponse.setId(newFish.getId());
-        fishResponse.setNavn(newFish.getNavn());
-        fishResponse.setArt(newFish.getArt());
-        fishResponse.setLengde(newFish.getLengde());
-        fishResponse.setVekt(newFish.getVekt());
-
-
-        return fishResponse;
+        Fish fish = mapToEntity(fishDto);
+        Fish savedFish = fishRepository.save(fish);
+        return mapToDto(savedFish);
     }
 
     @Override
@@ -74,10 +60,18 @@ public class FishServiceImpl implements FishService {
     public FishDto updateFish(int id, FishDto fishDto) {
         Fish fish = fishRepository.findById(id)
                 .orElseThrow( ()-> new FishNotFoundException("Fish could not be updated") );
-        fish.setNavn(fishDto.getNavn());
-        fish.setArt(fishDto.getArt());
-        fish.setLengde(fishDto.getLengde());
-        fish.setVekt(fishDto.getVekt());
+        if (fishDto.getNavn() != null) {
+            fish.setNavn(fishDto.getNavn());
+        }
+        if (fishDto.getArt() != null) {
+            fish.setArt(fishDto.getArt());
+        }
+        if (fishDto.getLengde() != 0) {
+            fish.setLengde(fishDto.getLengde());
+        }
+        if (fishDto.getVekt() != 0) {
+            fish.setVekt(fishDto.getVekt());
+        }
         Fish updatdFish = fishRepository.save(fish);
 
         return mapToDto(updatdFish);
@@ -95,12 +89,38 @@ public class FishServiceImpl implements FishService {
         FishDto fishDto = new FishDto();
 
         fishDto.setId(fish.getId());
-        fishDto.setNavn(fish.getNavn());
-        fishDto.setArt(fish.getArt());
-        fishDto.setLengde(fish.getLengde());
-        fishDto.setVekt(fish.getVekt());
+
+        if (fish.getNavn() != null) {
+            fishDto.setNavn(fish.getNavn());
+        } else {
+            fishDto.setNavn(null);
+        }
+        if (fish.getArt() != null) {
+            fishDto.setArt(fish.getArt());
+        }  else {
+            fishDto.setArt(null);
+        }
+        if (fish.getLengde() != 0) {
+            fishDto.setLengde(fish.getLengde());
+        }  else {
+            fishDto.setLengde(null);
+        }
+        if (fish.getVekt() != 0) {
+            fishDto.setVekt(fish.getVekt());
+        }   else {
+            fishDto.setVekt(null);
+        }
 
         return fishDto;
+    }
+
+    private Fish mapToEntity(FishDto dto) {
+        Fish fish = new Fish();
+        fish.setNavn(dto.getNavn());
+        fish.setArt(dto.getArt());
+        fish.setLengde(dto.getLengde());
+        fish.setVekt(dto.getVekt());
+        return fish;
     }
 }
 
