@@ -23,9 +23,11 @@ public class FishController {
     @GetMapping("fish")
     public ResponseEntity<FishResponse> getFishs(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "Navn", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
-        return new ResponseEntity<>(fishService.getAllFish(pageNo, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(fishService.getAllFish(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     // Få fish data med Id
@@ -37,13 +39,11 @@ public class FishController {
     */
 
     //create
-
     @PostMapping("fish/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<FishDto> createFish(@RequestBody FishDto fishDto) {
         return new ResponseEntity<>(fishService.createFish(fishDto), HttpStatus.CREATED);
     }
-
 
     //Update
     @PutMapping("fish/{id}/update")

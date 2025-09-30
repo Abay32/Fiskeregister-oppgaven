@@ -37,7 +37,7 @@ class FishServiceTests {
         when(fishRepository.findAll(Mockito.any(Pageable.class))).thenReturn(fishes);
 
         // when
-        FishResponse response = fishService.getAllFish(1, 10);
+        FishResponse response = fishService.getAllFish(1, 10, "navn", "asc");
 
         // then
         Assertions.assertThat(response).isNotNull();

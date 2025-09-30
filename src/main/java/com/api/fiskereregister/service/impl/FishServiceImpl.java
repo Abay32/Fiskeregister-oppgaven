@@ -9,6 +9,7 @@ import com.api.fiskereregister.service.FishService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,16 +31,23 @@ public class FishServiceImpl implements FishService {
     }
 
     @Override
-    public FishResponse getAllFish(int pageNO, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNO, pageSize);
-        Page<Fish> fish = fishRepository.findAll(pageable);
-        List<Fish> listOfFish = fish.getContent();
-        List<FishDto> content = listOfFish.stream().map(this::mapToDto).collect(Collectors.toList());
+    public FishResponse getAllFish(int pageNo, int pageSize, String sortBy, String sortDir) {
 
-        //Custom mapping
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Fish> fish = fishRepository.findAll(pageable);
+
+        List<FishDto> content = fish.getContent()
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+
         FishResponse fishResponse = new FishResponse();
         fishResponse.setFishList(content);
-        fishResponse.setPageNo(pageNO);
+        fishResponse.setPageNo(pageNo);
         fishResponse.setPageSize(pageSize);
         fishResponse.setTotalElements(fish.getTotalElements());
         fishResponse.setTotalPages(fish.getTotalPages());
@@ -47,6 +55,7 @@ public class FishServiceImpl implements FishService {
 
         return fishResponse;
     }
+
 
     /*
     @Override

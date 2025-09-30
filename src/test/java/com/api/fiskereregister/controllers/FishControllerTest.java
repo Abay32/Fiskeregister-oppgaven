@@ -80,12 +80,14 @@ class FishControllerTest {
     @Test
     public void getAllFish_ReturnResponseDto() throws Exception {
         FishResponse responseDto = FishResponse.builder().pageSize(10).last(true).pageNo(1).fishList(Arrays.asList(fishDto)).build();
-        when(fishService.getAllFish(1,10)).thenReturn(responseDto);
+        when(fishService.getAllFish(1,10, "navn", "asc")).thenReturn(responseDto);
 
         ResultActions response = mockMvc.perform(get("/api/v1/fish")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("pageNo","1")
-                .param("pageSize", "10"));
+                .param("pageSize", "10")
+                .param("sortBy", "navn")
+                .param("sortDir", "asc"));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fishList.size()", CoreMatchers.is(responseDto.getFishList().size())));

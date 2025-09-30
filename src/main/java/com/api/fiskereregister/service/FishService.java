@@ -5,7 +5,9 @@ import com.api.fiskereregister.dto.FishResponse;
 
 public interface FishService {
     FishDto createFish(FishDto fishDto);
-    FishResponse getAllFish(int pageNo, int pageSize );
+
+
+    FishResponse getAllFish(int pageNo, int pageSize, String sortBy, String sortDir );
     //FishDto getFishById(int id);
     FishDto updateFish(int id, FishDto fishDto);
     void deleteFish(int id);
