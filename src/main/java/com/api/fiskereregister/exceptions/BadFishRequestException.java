@@ -1,9 +1,8 @@
 package com.api.fiskereregister.exceptions;
 
-public class FishNotFoundException extends RuntimeException {
+public class BadFishRequestException extends RuntimeException {
     private static final long serialVersionUID = 1;
-    public FishNotFoundException(String message) {
+    public BadFishRequestException(String message) {
         super(message);
     }
-
 }

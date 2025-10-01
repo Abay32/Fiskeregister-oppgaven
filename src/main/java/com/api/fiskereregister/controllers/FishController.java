@@ -3,6 +3,7 @@ package com.api.fiskereregister.controllers;
 import com.api.fiskereregister.dto.FishDto;
 import com.api.fiskereregister.dto.FishResponse;
 import com.api.fiskereregister.service.FishService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class FishController {
     //create
     @PostMapping("fish/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<FishDto> createFish(@RequestBody FishDto fishDto) {
+    public ResponseEntity<FishDto> createFish(@Valid @RequestBody FishDto fishDto) {
         return new ResponseEntity<>(fishService.createFish(fishDto), HttpStatus.CREATED);
     }
 

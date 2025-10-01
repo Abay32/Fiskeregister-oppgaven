@@ -3,6 +3,7 @@ package com.api.fiskereregister.service.impl;
 import com.api.fiskereregister.dto.FishDto;
 import com.api.fiskereregister.dto.FishResponse;
 import com.api.fiskereregister.exceptions.FishNotFoundException;
+import com.api.fiskereregister.exceptions.BadFishRequestException;
 import com.api.fiskereregister.model.Fish;
 import com.api.fiskereregister.repository.FishRepository;
 import com.api.fiskereregister.service.FishService;
@@ -69,9 +70,15 @@ public class FishServiceImpl implements FishService {
     public FishDto updateFish(int id, FishDto fishDto) {
         Fish fish = fishRepository.findById(id)
                 .orElseThrow( ()-> new FishNotFoundException("Fish could not be updated") );
-        if (fishDto.getNavn() != null) {
-            fish.setNavn(fishDto.getNavn());
+
+
+        if (fishDto.getVekt() == null || fishDto.getVekt() <= 0) {
+            throw new BadFishRequestException("Vekt må være mer enn 0");
         }
+        if (fishDto.getLengde() == null || fishDto.getLengde() <= 0) {
+            throw new BadFishRequestException("Lengde må være positiv");
+        }
+
         if (fishDto.getArt() != null) {
             fish.setArt(fishDto.getArt());
         }
@@ -125,6 +132,8 @@ public class FishServiceImpl implements FishService {
 
     private Fish mapToEntity(FishDto dto) {
         Fish fish = new Fish();
+
+
         fish.setNavn(dto.getNavn());
         fish.setArt(dto.getArt());
         fish.setLengde(dto.getLengde());

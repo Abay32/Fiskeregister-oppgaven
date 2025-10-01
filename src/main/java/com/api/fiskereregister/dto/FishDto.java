@@ -16,6 +16,4 @@ public class FishDto {
     @NotBlank(message = "Art må oppgis") String art;
     @NotNull @Positive(message = "Vekta må være mer enn 0") Double vekt;
     @NotNull @Positive(message = "Lengde mp være positiv") Double lengde;
-
-
 }
